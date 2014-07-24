@@ -2,6 +2,9 @@ function data = makeSpikeAvg(data)
 
     spikeBarrier = .1;       % Spike Widths
 
+    % Remove old averages
+    data.spikeAvg = {};
+    
     % For each cluster make an average
     clusterList = unique(data.spikeClusters);
     spikeWidthSamp = round(data.spikeWidth*data.sampleRate);

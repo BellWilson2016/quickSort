@@ -1,3 +1,4 @@
+% Requires bh_tSNE
 function data = quickSort(data, nClusters, varargin)
 
     negPeaks = true;      % Negative going spikes
@@ -89,6 +90,7 @@ function data = quickSort(data, nClusters, varargin)
     data.spikeClusters = IDX;
     data.spikeEmbedding = mappedX;
     
+    % Make well-separated spike avg. waveforms.
     data = makeSpikeAvg(data);
     
     % Plot if required
