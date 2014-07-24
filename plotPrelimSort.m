@@ -1,4 +1,4 @@
-function plotPrelimSort(dateCode, wildcardString, nClusters)
+function plotPrelimSort(dateCode, wildcardString, nClusters) 
 
     load('dataLocation.mat');    
     baseName = [dataLocation,'/',dateCode,'/'];
