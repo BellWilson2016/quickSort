@@ -1,18 +1,19 @@
 % Requires bh_tSNE
-function data = quickSort(data, nClusters, varargin)
+function data = quickSort(data, nClusters, peakLimit)
 
     negPeaks = true;      % Negative going spikes
     posPeaks = false;
-    peakLimit = 1;        % SD (abs. value)
-    spikeWidth = .005;    % Seconds
+    % peakLimit = 2.5;        % SD (abs. value) 1.2 for ab1, 
+    spikeWidth = .010;    % Seconds
     LPF =  1000;          % Hz
     HPF =  100;           % Hz
     
-    if nargin > 2
-        plotOn = varargin{1};
-    else
-        plotOn = false;
-    end
+    plotOn = false;
+%     if nargin > 2
+%         plotOn = varargin{1};
+%     else
+%         plotOn = false;
+%     end
 
 
         % Filter data, store 
@@ -47,10 +48,10 @@ function data = quickSort(data, nClusters, varargin)
     peakHeights = [peakHeightsN(ixN);peakHeightsP(ixP)];
     
     % Remove peaks too close to start or end
-    remIX = find((peakList <= spikeHalfWidth) | (peakList >= (length(data.dVdT) - spikeHalfWidth)));
+    remIX = find((peakList <= 2*spikeHalfWidth) | (peakList >= (length(data.dVdT) - 2*spikeHalfWidth)));
     peakList(remIX) = [];
     peakHeights(remIX) = [];
-    
+
     % Assemble trace snippets into a matrix for dimensionality reduction
     dataMatrix = [];
     for peakN = 1:length(peakList)
@@ -58,15 +59,32 @@ function data = quickSort(data, nClusters, varargin)
         dataMatrix(end+1,:) = saveSnip';
     end
     
+    % Bail if we're not finding spikes.
+    if size(dataMatrix,1) < 5
+        data.spikeSamples = [];
+        data.spikeClusters = [];
+        data.spikeEmbedding = [];
+        data.rejectTrace = true;
+        return;
+    end
+    
+    
     % Reduce dimensionality
     PCAdim = 50;
-    perplexity = 30;
+    perplexity = getPerplexity(size(dataMatrix,1));
     theta = .3;
     mappedX = fast_tsne(dataMatrix, PCAdim, perplexity, theta);
+%     [COEFFS, SCORES] = princomp(dataMatrix);
+%     mappedX = SCORES(:,1:2);
+    
     
     % Cluster
-    Z = linkage(mappedX,'ward','euclidean');
-    IDX = cluster(Z,'maxclust',nClusters);
+    if size(dataMatrix,1) > 2
+        Z = linkage(mappedX,'ward','euclidean');
+        IDX = cluster(Z,'maxclust',nClusters);
+    else
+        IDX = ones(size(dataMatrix,1),1);
+    end
 %     IDX = kmeans(mappedX,nClusters);
 
     % Sort clusters by peak values
@@ -86,7 +104,6 @@ function data = quickSort(data, nClusters, varargin)
     
     % Save cluster info to the data structure
     data.spikeSamples = peakList;
-    data.spikeTimes   = peakList./data.sampleRate;
     data.spikeClusters = IDX;
     data.spikeEmbedding = mappedX;
     

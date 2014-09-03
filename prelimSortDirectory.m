@@ -4,7 +4,7 @@ function prelimSortDirectory(dateCode, wildcardString, nClusters)
     baseName = [dataLocation,'/',dateCode,'/'];
     wildcard = ['RL',dateCode,'_',wildcardString];
     
-    fileList = dir([baseName,wildcard]);
+    fileList = jdir([baseName,wildcard]);
 
     for fileN = 1:length(fileList)
         
