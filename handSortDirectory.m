@@ -11,10 +11,13 @@ classdef handSortDirectory < handle
     
     methods
         
-        function HSD = handSortDirectory(baseDir,wildcardString)
+        function HSD = handSortDirectory(dateCode, expCode)
+            baseDir = ['~/Desktop/Data/',dateCode,'/'];
+            wildcardString = ['RL',dateCode,'_',expCode,'_*.mat'];
+            
             HSD.baseDir = baseDir;
             HSD.wildcardString = wildcardString;
-            HSD.fileList = jdir([baseDir,wildcardString]);
+            HSD.fileList = jdir([baseDir,wildcardString])
             HSD.fileNumber = 0; 
             HSD.processFlag = false;
         end

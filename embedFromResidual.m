@@ -47,10 +47,12 @@ function data = embedFromResidual(data)
     PCAdim = 50;
     perplexity = getPerplexity(size(dataMatrix,1));
     theta = .3;
+%     save('dataMatrix.mat','dataMatrix','data');
     mappedX = fast_tsne(dataMatrix, PCAdim, perplexity, theta);
 
-%     [COEFF,SCORE] = princomp(dataMatrix);
-%     mappedX = SCORE(:,1:2);
+
+%      [COEFF,SCORE] = princomp(dataMatrix);
+%      mappedX = SCORE(:,1:2);
     
     data.spikeEmbedding = mappedX;
     

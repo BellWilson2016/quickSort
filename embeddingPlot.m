@@ -20,6 +20,9 @@ classdef embeddingPlot < daughterPlot
         	figure(EP.windowHandle);
             clf;
             
+            % ffsubplot(2,1,1);
+            
+            
             clusterList = unique(EP.handSorter.data.spikeClusters);
 
             for clustNn=1:length(clusterList)
@@ -32,6 +35,7 @@ classdef embeddingPlot < daughterPlot
                 set(points,'ButtonDownFcn',@EP.plotClick);
             end
             set(gca,'XTick',[],'YTick',[]); box on;
+            % box off;
             set(gca,'ButtonDownFcn',@EP.plotClick);  
             
         end

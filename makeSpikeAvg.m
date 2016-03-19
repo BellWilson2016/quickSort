@@ -1,9 +1,13 @@
 function data = makeSpikeAvg(data)
 
     spikeBarrier = .5;       % Spike Widths
+    colorList = [pretty(1);pretty(4);pretty(5);pretty(2);[1,0,1];pretty(7);pretty(8)];
 
     % Remove old averages
     data.spikeAvg = {};
+
+
+%    ffsubplot(2,1,1);
     
     % For each cluster make an average
     clusterList = unique(data.spikeClusters);
@@ -46,5 +50,15 @@ function data = makeSpikeAvg(data)
         else
             data.spikeAvg{clustN} = mean(allSpikes,2);
         end
+        
+%         for n = 1:size(allSpikes,2)
+%             plot(allSpikes(:,n),'Color',colorList(clustN,:)); hold on;
+%             
+%         end
+%         xlim([20 80]);
+%         axis square;
              
     end
+    
+    
+    

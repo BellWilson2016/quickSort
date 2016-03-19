@@ -299,6 +299,18 @@ classdef handSort < handle
                     HS.data = doubleSpike(HS.data,HS.plotPosition);
                     HS.refreshData();
                     
+                case 'tab'
+                    
+                    fprintf('Running single-spike matching...  ');
+                    HS.data = singleSpike(HS.data,HS.plotPosition);
+                    HS.refreshData();
+                    % Seek to the added spike
+                    newPos =  HS.time( HS.data.spikeSamples(end));
+                    HS.selectedPointIX = length(HS.data.spikeSamples);
+                    HS.setFocusLocation(newPos);
+                    HS.setMode(1, HS.selectedPointIX);
+                    
+                    
                 % Seek left to the next peak
                 case 'y'
                     distance = -(HS.time(HS.peaks.peakSamples) - HS.plotPosition);

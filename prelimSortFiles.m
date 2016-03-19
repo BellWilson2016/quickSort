@@ -1,4 +1,4 @@
-function prelimSortFiles(wholeNames, nClusters)
+function prelimSortFiles(wholeNames, nClusters, sensitivities)
 
     incrementalPlotOn = true;
 
@@ -9,7 +9,7 @@ function prelimSortFiles(wholeNames, nClusters)
         
         load(wholeName);
         % data = quickSort(data, nClusters, incrementalPlotOn);
-        data = fullSort(data, nClusters);
+        data = fullSort(data, nClusters, sensitivities);
         if incrementalPlotOn
             subplot(1,2,1);
             plotEmbeddings(data);
